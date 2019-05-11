@@ -10,22 +10,22 @@ module.exports.setRouter = (app) => {
 
     // params:classid
     app.get(`${baseUrl}/classroom/:number`, auth.isAuthorized ,trainingController.getClassRoomByNumber);
-    app.get(`${baseUrl}/classrooms/all`,  auth.isAuthorized,trainingController.getAllClassrooms);
+    app.get(`${baseUrl}/classrooms/all/`,  trainingController.getAllClassrooms);
     app.post(`${baseUrl}/classroom/add`,  auth.isAuthorized, trainingController.addClassoom);
     
 
     // params: trainerId.
-    app.get(`${baseUrl}/trainer/getTrainer/:name`, trainingController.getTrainerByName);
-    app.put(`${baseUrl}/trainer/edit/:id`, trainingController.editTrainer);
-    app.get(`${baseUrl}/trainer/all`, trainingController.getAllTrainers);
-    app.post(`${baseUrl}/trainer/add`, trainingController.addTrainer);
-    app.post(`${baseUrl}/trainer/delete/:id`, trainingController.deleteTrainer);
+    app.get(`${baseUrl}/trainer/getTrainer/:name`,auth.isAuthorized , trainingController.getTrainerByName);
+    app.put(`${baseUrl}/trainer/edit/:id`,auth.isAuthorized , trainingController.editTrainer);
+    app.get(`${baseUrl}/trainer/all/`, trainingController.getAllTrainers);
+    app.post(`${baseUrl}/trainer/add`,auth.isAuthorized , trainingController.addTrainer);
+    app.post(`${baseUrl}/trainer/delete/:id` , trainingController.deleteTrainer);
 
     
-    /*app.get(`${baseUrl}/schedule/all`,  userController.signUpFunction);
-    app.post(`${baseUrl}/schedule/add`,  trainingController.addTrainer);
-    app.put(`${baseUrl}/schedule/edit/:id`, userController.editUser);
-    app.post(`${baseUrl}/schedule/delete/:id`,  userController.deleteUser);*/
+    app.get(`${baseUrl}/schedule/all`,  trainingController.getAllTrainingSchedule);
+    app.post(`${baseUrl}/schedule/add`,  trainingController.addSchedule);
+    //app.put(`${baseUrl}/schedule/edit/:id`, userController.editUser);
+    app.post(`${baseUrl}/schedule/delete`,  trainingController.deleteSchedulebyclassNumber);
 
 
 }

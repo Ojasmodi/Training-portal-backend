@@ -22,7 +22,7 @@ let scheduleSchema = new Schema({
     },
     course: {
         type: String,
-        default: false
+        default: ''
     },
     trainer: {
         type: String,
@@ -30,7 +30,7 @@ let scheduleSchema = new Schema({
     },
     month: {
         type: String,
-        default: false
+        default: ''
     },
     createdOn: {
         type: Date,
