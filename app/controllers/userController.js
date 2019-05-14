@@ -13,96 +13,7 @@ const AuthModel = mongoose.model('Auth')
 const UserModel = mongoose.model('User')
 
 
-/* Get all user Details */
-let getAllUser = (req, res) => {
-    UserModel.find()
-        .select(' -__v -_id')
-        .lean()
-        .exec((err, result) => {
-            if (err) {
-                console.log(err)
-                logger.error(err.message, 'User Controller: getAllUser', 10)
-                let apiResponse = response.generate(true, 'Failed To Find User Details', 500, null)
-                res.send(apiResponse)
-            } else if (check.isEmpty(result)) {
-                logger.info('No User Found', 'User Controller: getAllUser')
-                let apiResponse = response.generate(true, 'No User Found', 404, null)
-                res.send(apiResponse)
-            } else {
-                let apiResponse = response.generate(false, 'All User Details Found', 200, result)
-                res.send(apiResponse)
-            }
-        })
-}// end get all users
 
-/* Get single user details */
-let getSingleUser = (req, res) => {
-    UserModel.findOne({ 'userId': req.params.userId })
-        .select('-password -__v -_id')
-        .lean()
-        .exec((err, result) => {
-            if (err) {
-                console.log(err)
-                logger.error(err.message, 'User Controller: getSingleUser', 10)
-                let apiResponse = response.generate(true, 'Failed To Find User Details', 500, null)
-                res.send(apiResponse)
-            } else if (check.isEmpty(result)) {
-                logger.info('No User Found', 'User Controller:getSingleUser')
-                let apiResponse = response.generate(true, 'No User Found', 404, null)
-                res.send(apiResponse)
-            } else {
-                let apiResponse = response.generate(false, 'User Details Found', 200, result)
-                res.send(apiResponse)
-            }
-        })
-}// end get single user
-
-
-
-let deleteUser = (req, res) => {
-
-    UserModel.findOneAndRemove({ 'userId': req.params.userId }).exec((err, result) => {
-        if (err) {
-            console.log(err)
-            logger.error(err.message, 'User Controller: deleteUser', 10)
-            let apiResponse = response.generate(true, 'Failed To delete user', 500, null)
-            res.send(apiResponse)
-        } else if (check.isEmpty(result)) {
-            logger.info('No User Found', 'User Controller: deleteUser')
-            let apiResponse = response.generate(true, 'No User Found', 404, null)
-            res.send(apiResponse)
-        } else {
-            let apiResponse = response.generate(false, 'Deleted the user successfully', 200, result)
-            res.send(apiResponse)
-        }
-    });// end user model find and remove
-
-
-}// end delete user
-
-let editUser = (req, res) => {
-
-    let options = req.body;
-    UserModel.update({ 'userId': req.params.userId }, options).exec((err, result) => {
-        if (err) {
-            console.log(err)
-            logger.error(err.message, 'User Controller:editUser', 10)
-            let apiResponse = response.generate(true, 'Failed To edit user details', 500, null)
-            res.send(apiResponse)
-        } else if (check.isEmpty(result)) {
-            logger.info('No User Found', 'User Controller: editUser')
-            let apiResponse = response.generate(true, 'No User Found', 404, null)
-            res.send(apiResponse)
-        } else {
-            let apiResponse = response.generate(false, 'User details edited', 200, result)
-            res.send(apiResponse)
-        }
-    });// end user model update
-
-
-}// end edit user
-
-// start user signup function 
 
 let signUpFunction = (req, res) => {
 
@@ -333,7 +244,7 @@ let loginFunction = (req, res) => {
         .catch((err) => {
             console.log("errorhandler");
             console.log(err);
-            res.status(err.status)
+            //res.status(err.status)
             res.send(err)
         })
 }
@@ -368,10 +279,6 @@ let logout = (req, res) => {
 module.exports = {
 
     signUpFunction: signUpFunction,
-    getAllUser: getAllUser,
-    editUser: editUser,
-    deleteUser: deleteUser,
-    getSingleUser: getSingleUser,
     loginFunction: loginFunction,
     logout: logout
 

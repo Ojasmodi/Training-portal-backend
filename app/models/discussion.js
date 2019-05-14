@@ -33,14 +33,7 @@ let discussionSchema = new Schema({
     default: ''
   },
   replies:{
-      type: [{
-          replyId:String,
-          replyBy:String,
-          replyMsg:String,
-          userid_of_replier:String,
-          replyCreatedOn:Date
-      }],
-      default:null
+      type: []
   },
   createdOn :{
     type:Date,

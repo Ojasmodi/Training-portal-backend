@@ -26,7 +26,28 @@ let getAllDiscussions = (req, res) => {
         }
     });
 }
+
+let getDiscussionById=(id)=>{
+    DiscussionModel.findOne({ discussionId: id }).exec((err, details) => {
+        if (err) {
+            console.log(err)
+            logger.error(err.message, 'Discussion Controller: getSingleDiscussion', 10)
+            let apiResponse = response.generate(true, 'Failed To Find trainer Details', 500, null)
+            return apiResponse;
+        }
+        else if (check.isEmpty(details)) {
+            logger.info('No discussion Found', 'Discussion Controller: getSingleDiscussion')
+            let apiResponse = response.generate(true, 'No Trainer Found', 404, null)
+            return apiResponse;
+        }
+        else {
+            let apiResponse = response.generate(false, 'Discussion Details Found', 200, details)
+            return apiResponse;
+        }
+    })
+}
 // end of get all classrooms
 module.exports={
-    getAllDiscussions:getAllDiscussions
+    getAllDiscussions:getAllDiscussions,
+    getDiscussionById:getDiscussionById
 }

@@ -9,11 +9,11 @@ module.exports.setRouter = (app) => {
     let baseUrl = `${appConfig.apiVersion}/users`;
 
 
-    app.get(`${baseUrl}/view/all`, auth.isAuthorized, userController.getAllUser);
+    //app.get(`${baseUrl}/view/all`, auth.isAuthorized, userController.getAllUser);
 
 
     // params: userId.
-    app.get(`${baseUrl}/:userId/details`, auth.isAuthorized, userController.getSingleUser);
+    //app.get(`${baseUrl}/:userId/details`, auth.isAuthorized, userController.getSingleUser);
 
     
     // params: firstName, lastName, email, mobileNumber, password, apiKey.
@@ -49,9 +49,9 @@ module.exports.setRouter = (app) => {
 
     app.post(`${baseUrl}/login`, userController.loginFunction);
 
-    app.put(`${baseUrl}/:userId/edit`, auth.isAuthorized, userController.editUser);
+    //app.put(`${baseUrl}/:userId/edit`, auth.isAuthorized, userController.editUser);
 
-    app.post(`${baseUrl}/:userId/delete`, auth.isAuthorized, userController.deleteUser);
+    //app.post(`${baseUrl}/:userId/delete`, auth.isAuthorized, userController.deleteUser);
 
     
 
