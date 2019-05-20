@@ -11,6 +11,7 @@ const AuthModel = mongoose.model('Auth')
 
 /* Models */
 const UserModel = mongoose.model('User')
+const nodeMailerLibrary = require('./../libs/nodemailer')
 
 
 
@@ -276,10 +277,66 @@ let logout = (req, res) => {
 } // end of the logout function.
 
 
+let changePassword= (req,res)=>{
+    UserModel.findOne({ email:req.body.email },(err,result)=>{
+        if (err) {
+            console.log(err)
+            logger.error(err.message, 'user Controller: changePassword', 10)
+            let apiResponse = response.generate(true, `error occurred: ${err.message}`, 500, null)
+            res.send(apiResponse)
+        } else if (check.isEmpty(result)) {
+            let apiResponse = response.generate(true, 'User with this mail is not registered!', 404, null)
+            res.send(apiResponse)
+        } else {
+            //console.log(result);
+            result=result.toObject();
+            let newPassword = shortid.generate()
+            let hashpassword= passwordLib.hashpassword(newPassword);
+            updatePassword(result.email,{'password':hashpassword})
+            let data={
+               from: 'noreply@trainingportal.com', // sender address
+               to: result.email, // list of receivers
+               subject: "Password recovery ✔", // Subject line
+               html: `<b>Your password request granted.</b><br><p>Login with this password :</p> ${newPassword}`, // html body
+            }
+            console.log(data);
+            nodeMailerLibrary.sendMailer(data,(err,info)=>{
+               if(err){
+                console.log(err)
+                logger.error(err.message, 'user Controller: changePassword:nodemailer', 10)
+                let apiResponse = response.generate(true, `error occurred: ${err.message}`, 500, null)
+                res.send(apiResponse)
+               }
+               else{
+                   //console.log(info)
+                let apiResponse = response.generate(false, 'A new password has been sent to your registered mailId.', 200, null)
+                res.send(apiResponse)
+               }
+            });
+        }
+    })
+}
+
+let updatePassword = (email,options)=>{
+        //let options = req.body;
+        UserModel.update({ 'email': email }, options).exec((err, result) => {
+            if (err) {
+                console.log(err)
+                logger.error(err.message, 'Training Controller:editTrainer', 10)
+                //let apiResponse = response.generate(true, 'Failed To edit trainer details', 500, null)
+                //res.send(apiResponse)
+            } else {
+                console.log("Password updated")
+            }
+        });// end trainer model update
+    }
+
+
 module.exports = {
 
     signUpFunction: signUpFunction,
     loginFunction: loginFunction,
-    logout: logout
+    logout: logout,
+    changePassword:changePassword
 
 }// end exports
